@@ -27,3 +27,15 @@ SQRT\Tag
     // <input class="two" id="one" name="one[two]" style="width: 100px;" type="text" value="123" />
 
 Полный набор примеров находится в тестах.
+
+### Объединение атрибутов
+
+Предусмотрен метод `Tag::MergeAttr($attr, $_ = null)`, позволяющий объединять несколько групп атрибутов в одну.
+Массивы объединяются по ключам, значения разделяются пробелами.
+
+    Tag::MergeAttr('one', array('id' => 'two')); // array('class' => 'one', 'id' => 'two');
+    
+    Tag::MergeAttr('one', 'two'); // array('class' => 'one two');
+    
+    Tag::MergeAttr(array('style' => 'border: red;'), array('class' => 'red', 'style' => 'color: green;'));
+    // array('style' => 'border: red; color: green;', 'class' => 'red');

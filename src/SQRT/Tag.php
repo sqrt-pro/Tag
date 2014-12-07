@@ -93,22 +93,7 @@ class Tag
 
   public function getStyle()
   {
-    $style = $this->get('style');
-
-    if (is_array($style)) {
-      $style_arr = array();
-      foreach ($style as $k => $v) {
-        if (is_numeric($k)) {
-          $style_arr[] = trim($v, ';') . ';';
-        } else {
-          $style_arr[] = $k . ': ' . trim($v, ';') . ';';
-        }
-      }
-
-      $style = join(' ', $style_arr);
-    }
-
-    return $style;
+    return static::ProcessStyle($this->get('style'));
   }
 
   public function setName($name)
@@ -132,6 +117,54 @@ class Tag
     }
 
     return $this;
+  }
+
+  /** Объединение нескольких атрибутов */
+  public static function MergeAttr($attr, $_ = null)
+  {
+    $out = false;
+    $arr = func_get_args();
+    foreach ($arr as $v) {
+      if (is_string($v)) {
+        $v = array('class' => $v);
+      }
+
+      if (is_array($v)) {
+        foreach ($v as $key => $val) {
+          if ($key == 'style') {
+            $val = static::ProcessStyle($val);
+          }
+
+          $val_arr = array();
+          if (isset($out[$key])) {
+            $val_arr[] = $out[$key];
+          }
+          $val_arr[] = $val;
+
+          $out[$key] = join(' ', $val_arr);
+        }
+      }
+    }
+
+    return $out;
+  }
+
+  protected static function ProcessStyle($style)
+  {
+    if (is_array($style)) {
+      $style_arr = array();
+      foreach ($style as $k => $v) {
+        if (is_numeric($k)) {
+          $style_arr[] = trim($v, ';') . ';';
+        } else {
+          $style_arr[] = $k . ': ' . trim($v, ';') . ';';
+        }
+      }
+
+      $style = join(' ', $style_arr);
+    }
+
+    return $style;
   }
 
   protected function processAttr()

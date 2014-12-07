@@ -115,4 +115,23 @@ class tagTest extends PHPUnit_Framework_TestCase
       'Указаны свойства'
     );
   }
+
+  function testMergeAttr()
+  {
+    $res = Tag::MergeAttr('one', 'two');
+    $exp = array('class' => 'one two');
+    $this->assertEquals($exp, $res, 'Вариант 1');
+
+    $res = Tag::MergeAttr('one', array('id' => 'two'));
+    $exp = array('class' => 'one', 'id' => 'two');
+    $this->assertEquals($exp, $res, 'Вариант 2');
+
+    $res = Tag::MergeAttr(array('style' => 'border: red;'), array('class' => 'red', 'style' => 'color: green;'));
+    $exp = array('style' => 'border: red; color: green;', 'class' => 'red');
+    $this->assertEquals($exp, $res, 'Вариант 3');
+
+    $res = Tag::MergeAttr(array('style' => array('width' => '15px;', 'height' => '200px')), 'red');
+    $exp = array('style' => 'width: 15px; height: 200px;', 'class' => 'red');
+    $this->assertEquals($exp, $res, 'Вариант 4');
+  }
 }
