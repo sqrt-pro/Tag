@@ -8,6 +8,7 @@ class Tag
   protected $attr;
   protected $short;
   protected $value;
+  protected $selected;
 
   function __construct($tag, $value = null, $attr = null, $short = null)
   {
@@ -119,6 +120,34 @@ class Tag
     return $this;
   }
 
+  /** Установка флага "выбран" для тегов input и option */
+  public function getSelected()
+  {
+    return $this->selected;
+  }
+
+  /** Установка флага "выбран" для тегов input и option */
+  public function setSelected($selected)
+  {
+    $this->selected = $selected;
+
+    return $this;
+  }
+
+  /** Проверка, выбрано ли значение */
+  public function checkSelectedValue($value)
+  {
+    if (is_null($this->selected)) {
+      return false;
+    }
+
+    if (is_array($this->selected)) {
+      return in_array($value, $this->selected);
+    }
+
+    return $this->selected == $value;
+  }
+
   /** Объединение нескольких атрибутов */
   public static function MergeAttr($attr, $_ = null)
   {
@@ -149,6 +178,12 @@ class Tag
     return $out;
   }
 
+  /** Возможность добавить произвольный обработчик атрибутов */
+  protected function preProcessAttr($attr)
+  {
+    return $attr;
+  }
+
   protected static function ProcessStyle($style)
   {
     if (is_array($style)) {
@@ -169,16 +204,20 @@ class Tag
 
   protected function processAttr()
   {
-    if (!$this->attr) {
+    $attr = $this->preProcessAttr($this->attr);
+
+    if (!$attr) {
       return false;
     }
 
-    ksort($this->attr);
+    ksort($attr);
 
     $str = '';
-    foreach ($this->attr as $key => $val) {
+    foreach ($attr as $key => $val) {
+      $val = htmlspecialchars($val);
+
       if ($key == 'style') {
-        $val = $this->getStyle();
+        $val = static::ProcessStyle($val);
       }
 
       $str .= ' ' . $key . '="' . $val . '"';

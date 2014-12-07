@@ -94,6 +94,15 @@ class tagTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('<a class="two" href="/one/" target="_blank">Hello</a>', $t->toHTML(), 'Указаны свойства');
   }
 
+  function testForm()
+  {
+    $t = new Tag\Form('/hello/', '<p>Form Contents</p>');
+    $t->setEnctype('multipart/form-data');
+
+    $exp = '<form action="/hello/" enctype="multipart/form-data" method="POST"><p>Form Contents</p></form>';
+    $this->assertEquals($exp, $t->toHTML(), 'Форма');
+  }
+
   function testInput()
   {
     $t = new Tag\Input('one');
@@ -101,6 +110,61 @@ class tagTest extends PHPUnit_Framework_TestCase
 
     $t = new Tag\Input('two', 123, 'one', 'email');
     $this->assertEquals('<input class="one" name="two" type="email" value="123" />', $t->toHTML(), 'Указаны свойства');
+
+    $t = new Tag\Input('one', 'Ололо """');
+    $this->assertEquals('<input name="one" type="text" value="Ололо &quot;&quot;&quot;" />', $t->toHTML(), 'Экранирование символов');
+  }
+
+  function testTextarea()
+  {
+    $t   = new Tag\Textarea('text', 'Привет, <a href="#">мир</a>!', 'editor');
+    $exp = '<textarea class="editor" name="text">Привет, &lt;a href=&quot;#&quot;&gt;мир&lt;/a&gt;!</textarea>';
+    $this->assertEquals($exp, $t->toHTML(), 'Содержимое тега экранируется');
+  }
+
+  function testRadio()
+  {
+    $t = new Tag\Radio('one', 'two');
+    $t->setSelected(true);
+
+    $this->assertEquals('<input checked="checked" name="one" type="radio" value="two" />', $t->toHTML(), 'input[type=radio]');
+    $this->assertEquals('two', $t->getDisplayValue(), 'Значение для отображения');
+    $this->assertEquals('two', $t->getValue(), 'Значение для инпута');
+
+    $t = new Tag\Radio('one', 'two', 'three', true);
+    $this->assertEquals(
+      '<input checked="checked" name="one" type="radio" value="two" />',
+      $t->toHTML(),
+      'input[type=radio]'
+    );
+    $this->assertEquals('three', $t->getDisplayValue(), 'Значение для отображения');
+    $this->assertEquals('two', $t->getValue(), 'Значение для инпута');
+  }
+
+  function testRadioListing()
+  {
+    $t   = new Tag\RadioListing('dinner', array(12 => 'Рано', 14 => 'Нормально', 16 => 'Поздно'), 14);
+    $exp = '<label><input name="dinner" type="radio" value="12" /> Рано</label>' . "\n"
+      . '<label><input checked="checked" name="dinner" type="radio" value="14" /> Нормально</label>' . "\n"
+      . '<label><input name="dinner" type="radio" value="16" /> Поздно</label>' . "\n";
+    $this->assertEquals($exp, $t->toHTML(), 'Рендер списка опций');
+  }
+
+  function testCheckboxListing()
+  {
+    $t = new Tag\CheckboxListing('age', array(10 => '10 лет', 20 => '20 лет', 30 => '30 лет'), 20);
+
+    $exp = '<label><input name="age" type="checkbox" value="10" /> 10 лет</label>' . "\n"
+      . '<label><input checked="checked" name="age" type="checkbox" value="20" /> 20 лет</label>' . "\n"
+      . '<label><input name="age" type="checkbox" value="30" /> 30 лет</label>' . "\n";
+    $this->assertEquals($exp, $t->toHTML(), 'Выбрана одна опция');
+
+    $t->setSelected(array(10, 20));
+
+    $exp = '<label><input checked="checked" name="age" type="checkbox" value="10" /> 10 лет</label>' . "\n"
+      . '<label><input checked="checked" name="age" type="checkbox" value="20" /> 20 лет</label>' . "\n"
+      . '<label><input name="age" type="checkbox" value="30" /> 30 лет</label>' . "\n";
+    $this->assertEquals($exp, $t->toHTML(), 'Выбрано несколько опций');
   }
 
   function testImg()
@@ -114,6 +178,41 @@ class tagTest extends PHPUnit_Framework_TestCase
       $t->toHTML(),
       'Указаны свойства'
     );
+  }
+
+  function testOption()
+  {
+    $t = new Tag\Option('One');
+    $this->assertEquals('<option>One</option>', $t->toHTML(), 'Значение');
+
+    $t = new Tag\Option('Choose', false, true);
+    $this->assertEquals('<option selected="selected" value="">Choose</option>', $t->toHTML(), 'Заголовок без значения');
+
+    $t = new Tag\Option('Two', 2);
+    $this->assertEquals('<option value="2">Two</option>', $t->toHTML(), 'Заголовок и значение');
+
+    $t->setSelected(true);
+    $this->assertEquals('<option selected="selected" value="2">Two</option>', $t->toHTML(), 'Выбранный пункт');
+  }
+
+  function testSelect()
+  {
+    $t = new Tag\Select('type', array(1 => 'one', 2 => 'two'), 2, 'one');
+    $exp = '<select class="one" name="type">'
+      . '<option value="1">one</option>' . "\n"
+      . '<option selected="selected" value="2">two</option>' . "\n"
+      . '</select>';
+
+    $this->assertEquals($exp, $t->toHTML(), 'Стандартный рендер');
+
+    $t->setIgnoreOptionsKeys(true);
+    $t->setSelected('one');
+
+    $exp = '<select class="one" name="type">'
+      . '<option selected="selected" value="one">one</option>' . "\n"
+      . '<option value="two">two</option>' . "\n"
+      . '</select>';
+    $this->assertEquals($exp, $t->toHTML(), 'Стандартный рендер');
   }
 
   function testMergeAttr()

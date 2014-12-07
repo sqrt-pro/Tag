@@ -2,7 +2,8 @@ SQRT\Tag
 ========
 
 Класс `Tag` позволяет генерировать HTML-теги и задавать атрибуты к ним. Кроме непосредственно класса `Tag` имеется набор
-классов-наследников, для быстрого создания основных часто используемых тегов `<a>`, `<img>`, `<input>`.
+классов-наследников, для быстрого создания основных часто используемых тегов 
+`<a>`, `<img>`, `<input>`, `<select>`, `<textarea>`, `<form>`.
 
     use SQRT\Tag;
 
@@ -25,6 +26,15 @@ SQRT\Tag
     $t->setStyle('width: 100px;');
     echo $t->toHTML();
     // <input class="two" id="one" name="one[two]" style="width: 100px;" type="text" value="123" />
+
+Для генерации списков опций `input[type=checkbox]` и `input[type=radio]` предусмотрены классы `CheckboxListing` и `RadioListing`.
+
+    $t = new Tag\CheckboxListing('age', array(10 => '10 лет', 20 => '20 лет', 30 => '30 лет'));
+    $t->setSelected(array(10, 20));
+    
+    // <label><input checked="checked" name="age" type="checkbox" value="10" /> 10 лет</label>
+    // <label><input checked="checked" name="age" type="checkbox" value="20" /> 20 лет</label>
+    // <label><input name="age" type="checkbox" value="30" /> 30 лет</label>
 
 Полный набор примеров находится в тестах.
 
