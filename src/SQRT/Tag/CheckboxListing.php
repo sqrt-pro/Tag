@@ -24,7 +24,10 @@ class CheckboxListing extends TagWithOptions
   /** Создание тега для вложенных опций */
   protected function makeOptionTag($value, $real_value)
   {
-    return new Checkbox($this->getName(), $real_value, $value, $this->checkSelectedValue($real_value));
+    $ch = new Checkbox($this->getName(), $real_value, $value, $this->checkSelectedValue($real_value));
+    $ch->setIsArrayValue(true);
+
+    return $ch;
   }
 
   /** Создание тега для вложенных опций */

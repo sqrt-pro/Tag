@@ -154,16 +154,16 @@ class tagTest extends PHPUnit_Framework_TestCase
   {
     $t = new Tag\CheckboxListing('age', array(10 => '10 лет', 20 => '20 лет', 30 => '30 лет'), 20);
 
-    $exp = '<label><input name="age" type="checkbox" value="10" /> 10 лет</label>' . "\n"
-      . '<label><input checked="checked" name="age" type="checkbox" value="20" /> 20 лет</label>' . "\n"
-      . '<label><input name="age" type="checkbox" value="30" /> 30 лет</label>' . "\n";
+    $exp = '<label><input name="age[]" type="checkbox" value="10" /> 10 лет</label>' . "\n"
+      . '<label><input checked="checked" name="age[]" type="checkbox" value="20" /> 20 лет</label>' . "\n"
+      . '<label><input name="age[]" type="checkbox" value="30" /> 30 лет</label>' . "\n";
     $this->assertEquals($exp, $t->toHTML(), 'Выбрана одна опция');
 
     $t->setSelected(array(10, 20));
 
-    $exp = '<label><input checked="checked" name="age" type="checkbox" value="10" /> 10 лет</label>' . "\n"
-      . '<label><input checked="checked" name="age" type="checkbox" value="20" /> 20 лет</label>' . "\n"
-      . '<label><input name="age" type="checkbox" value="30" /> 30 лет</label>' . "\n";
+    $exp = '<label><input checked="checked" name="age[]" type="checkbox" value="10" /> 10 лет</label>' . "\n"
+      . '<label><input checked="checked" name="age[]" type="checkbox" value="20" /> 20 лет</label>' . "\n"
+      . '<label><input name="age[]" type="checkbox" value="30" /> 30 лет</label>' . "\n";
     $this->assertEquals($exp, $t->toHTML(), 'Выбрано несколько опций');
   }
 
