@@ -207,8 +207,9 @@ class tagTest extends PHPUnit_Framework_TestCase
 
     $t->setIgnoreOptionsKeys(true);
     $t->setSelected('one');
+    $t->setPlaceholder('Выберите');
 
-    $exp = '<select class="one" name="type">'
+    $exp = '<select class="one" name="type"><option value="">Выберите</option>' . "\n"
       . '<option selected="selected" value="one">one</option>' . "\n"
       . '<option value="two">two</option>' . "\n"
       . '</select>';
