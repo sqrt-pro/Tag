@@ -1,5 +1,10 @@
 # Tag
 
+[![Build Status](https://travis-ci.org/sqrt-pro/Tag.svg?branch=v.0.1.0)](https://travis-ci.org/sqrt-pro/Tag)
+[![Coverage Status](https://coveralls.io/repos/sqrt-pro/Tag/badge.svg)](https://coveralls.io/r/sqrt-pro/Tag)
+[![Latest Stable Version](https://poser.pugx.org/sqrt-pro/tag/version.svg)](https://packagist.org/packages/sqrt-pro/tag)
+[![License](https://poser.pugx.org/sqrt-pro/tag/license.svg)](https://packagist.org/packages/sqrt-pro/tag)
+
 Класс `Tag` позволяет генерировать HTML-теги и задавать атрибуты к ним. Кроме непосредственно класса `Tag` имеется набор
 классов-наследников, для быстрого создания основных часто используемых тегов 
 `<a>`, `<img>`, `<input>`, `<select>`, `<textarea>`, `<form>`.
