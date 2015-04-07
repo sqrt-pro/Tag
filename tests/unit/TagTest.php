@@ -1,10 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../init.php';
-
 use SQRT\Tag;
 
-class tagTest extends PHPUnit_Framework_TestCase
+class TagTest extends PHPUnit_Framework_TestCase
 {
   function testStyle()
   {

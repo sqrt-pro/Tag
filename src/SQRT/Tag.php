@@ -214,7 +214,9 @@ class Tag
 
     $str = '';
     foreach ($attr as $key => $val) {
-      $val = htmlspecialchars($val);
+      if (is_string($val)) {
+        $val = htmlspecialchars($val);
+      }
 
       if ($key == 'style') {
         $val = static::ProcessStyle($val);
