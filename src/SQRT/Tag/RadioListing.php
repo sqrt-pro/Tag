@@ -28,8 +28,12 @@ class RadioListing extends TagWithOptions
   }
 
   /** Создание тега для вложенных опций */
-  protected function renderOptionsTmpl(Radio $tag)
+  protected function renderOptionsTmpl(Tag $tag)
   {
-    return sprintf($this->getOptionsTmpl(), $tag->toHTML(), $tag->getDisplayValue());
+    return sprintf(
+      $this->getOptionsTmpl(),
+      $tag->toHTML(),
+      $tag instanceof Radio ? $tag->getDisplayValue() : $tag->getValue()
+    );
   }
 }

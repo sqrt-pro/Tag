@@ -31,8 +31,12 @@ class CheckboxListing extends TagWithOptions
   }
 
   /** Создание тега для вложенных опций */
-  protected function renderOptionsTmpl(Checkbox $tag)
+  protected function renderOptionsTmpl(Tag $tag)
   {
-    return sprintf($this->getOptionsTmpl(), $tag->toHTML(), $tag->getDisplayValue());
+    return sprintf(
+      $this->getOptionsTmpl(),
+      $tag->toHTML(),
+      $tag instanceof Checkbox ? $tag->getDisplayValue() : $tag->getValue()
+    );
   }
 }
